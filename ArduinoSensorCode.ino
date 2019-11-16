@@ -68,7 +68,7 @@ boolean outsideRange(int _range){
   }
 }
 
-boolean insideRange(int _distance, int _range){
+boolean insideRange(int _range){
   if(sensorOn() < _range){
     return true;
   }
