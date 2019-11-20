@@ -95,6 +95,14 @@ class testDistanceSensor
         cmReading = durationToDistance(sensor.detectDuration());
         return (cmReading < range);
       }
+      bool testDistanceAfterDelay(int setDelay){
+        float cmReading;
+        cmReading = durationToDistance(sensor.detectDuration());
+        float delayReading;
+        delay(setDelay);
+        delayReading = durationToDistance(sensor.detectDuration());
+        return (cmReading == delayReading);
+      }
 };
         
 
@@ -113,22 +121,36 @@ void setup()
 
 void loop(){
   int counter = 0;
+  int countFail = 0;
     
   testDistanceSensor shelfTest;
   if (shelfTest.testSensorOn())
   {
     counter++;
-  } 
+  } else{
+    countFail++;
+  }
   if (shelfTest.testOutsideRange(20))
   {
     counter++;
+  } else{
+    countFail++;
   }
   if (shelfTest.testInsideRange(20))
   {
     counter++;
+  } else{
+    countFail++;
   }
-
-  Serial.println(counter + " of 4 Tests passed");
+  if (shelfTest.testDistanceAfterDelay(200))
+  {
+    counter++;
+  } else{
+    countFail++;
+  }
+  
+  Serial.print(String(counter) + " of 4 Tests passed. ");
+  Serial.println(String(countFail) + " of 4 Tests failed.");
   
   for(;;){
     
