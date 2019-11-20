@@ -1,3 +1,18 @@
+/*
+ * 
+ * Create a function which will convert the duration that the HC Sr04 distance
+ * sensor measures to centimeters
+ * 
+ */
+
+
+float durationToDistance(float duration)
+{
+    float distance;
+    distance = duration*0.034/2;
+    return distance;
+}
+
 /* 
  *  
  *Create a stub for the HC SR04 distance sensor that is provided through 
@@ -13,18 +28,21 @@
  *wave takes to bounce off of an object
  *
  */
-class stubDistanceSensor:
+class stubDistanceSensor
+{
 
-    //Initialize the trigger, echo, and duration  
-    def __init__(self, trigger, echo, duration)
-    
-        self.trigger = trigger 
-        self.echo = echo 
-        self.duration = duration
+    private:
+      int trigger = 1;
+      int echo = 2;
+      int duration = 588;
 
-    //create a function that will return the duration
-    def detectDuration(self) 
-        return self.duration
+    public:
+      //create a function that will return the duration
+      int detectDuration(void)
+      {
+        return duration;
+      }
+};
 
 /*
  * 
@@ -47,37 +65,39 @@ class stubDistanceSensor:
  * the distance value is roughly 10 centimeters
  */
  
-class testDistanceSensor:
+class testDistanceSensor
+{
+    private:  
+      //Create a stub sensor 
+      stubDistanceSensor sensor; 
+    public:
+      //Create a test which will sense if the sensor is on
+      bool testSensorOn(void)
+      {
+        return (sensor.detectDuration() > 0);
+      }
+  
+      //Create a test which will test if the sensor is within the range of the shelf
+      //By testing if it is out of the range
+      bool testOutsideRange(float range)
+      {
+        float cmReading;
+        cmReading = durationToDistance(sensor.detectDuration());
+        return ((cmReading > range) == false);
+      }
+        
+  
+      //Create a test which will test if the sensor is within the range of the shelf
+      //By testing if it is reading within the range
+      bool testInsideRange(float range)
+      {
+        float cmReading;
+        cmReading = durationToDistance(sensor.detectDuration());
+        return (cmReading < range);
+      }
+};
+        
 
-    //Create a stub sensor 
-    sensor = stubDistanceSensor(1,2,588)
-
-    //Create a test which will sense if the sensor is on
-    def testSensorOn(self)
-      assert(sensor.detectDuration > 0)
-
-    //Create a test which will test if the sensor is within the range of the shelf
-    //By testing if it is out of the range
-    def testOutsideRange(float range)
-      cmReading = durationToDistance(sensor.detectDuration)
-      assert(cmReading > range)
-
-    //Create a test which will test if the sensor is within the range of the shelf
-    //By testing if it is reading within the range
-    def testInsideRange(float range)
-      cmReading = durationToDistance(sensor.detectDuration)
-      assert(cmReading < range)
-
-/*
- * 
- * Create a function which will convert the duration that the HC Sr04 distance
- * sensor measures to centimeters
- * 
- */
-float durationToDistance(float duration):
-
-  distance = duration*0.034/2
-  return distance
 
 /*
  * 
@@ -86,8 +106,31 @@ float durationToDistance(float duration):
  * pi
  * 
  */
+void setup()
+{
+  Serial.begin(9600); 
+} 
 
- shelfTest = testDistanceSensor()
- shelfTest.testSensorOn()
- shelfTest.testOutsideRange()
- shelfTest.testInsideRange()
+void loop(){
+  int counter = 0;
+    
+  testDistanceSensor shelfTest;
+  if (shelfTest.testSensorOn())
+  {
+    counter++;
+  } 
+  if (shelfTest.testOutsideRange(20))
+  {
+    counter++;
+  }
+  if (shelfTest.testInsideRange(20))
+  {
+    counter++;
+  }
+
+  Serial.println(counter + " of 4 Tests passed");
+  
+  for(;;){
+    
+  }
+}
