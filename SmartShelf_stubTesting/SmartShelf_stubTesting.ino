@@ -34,7 +34,7 @@ class stubDistanceSensor
     private:
       int trigger = 1;
       int echo = 2;
-      int duration = 588;
+      int duration = 999999;
 
     public:
       //create a function that will return the duration
