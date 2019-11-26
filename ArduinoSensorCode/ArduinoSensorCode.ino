@@ -8,6 +8,7 @@ int stockButtonState = 0;
 int backButtonState = 0;  //Button initial value (Active high)
 long duration;  //Duration time for return signal on sensor
 double distance, distanceOld, range, minRange;
+boolean stocking;
 
 void setup() {
   //Serial port communication begin
@@ -34,20 +35,27 @@ void loop() {
   //Save previous and current distance so it can be seen if there is a change which the client PI needs to know about
   distanceOld = distance;
   distance = sensorOn();
-
-  while(stockButtonState == HIGH){  //If restocking button is being pressed
-    moveBack();
+  
+  if(stockButtonState == HIGH){  //If restocking button is being pressed
+    stocking = true;
+    while(stocking){
+      moveBack();
+      if(stockButtonState == HIGH){
+        stocking = false;
+      }
+    }
   }
   
-  while(distance > 15.0){  //Using 15.0 as the desired distance for testing purposes
+  while(distance > minRange){  //Using 15.0 as the desired distance for testing purposes
     Serial.println("moving forward");
     moveForward();
     distance = sensorOn();
   }
-  if(distance > minRange && distance < 15.0){  //Check if the backing plate has entered the "sweet spot" where we want it to be (for testing)
-    Serial.println("hit");
-    servo.detach();
-  }
+  
+//  if(distance > minRange && distance < 15.0){  //Check if the backing plate has entered the "sweet spot" where we want it to be (for testing)
+//    Serial.println("hit");
+//    servo.detach();
+//  }
   if(distance != distanceOld){  //If the distance has changed
     Serial.println(distance); //Update the client PI
   }
@@ -85,23 +93,19 @@ void moveForward(){
 
 void checkShelfGap(){
   backButtonState = digitalRead(backPlateButton);
-  if(backButtonState == LOW){
+  while(backButtonState == LOW){
     if(!servo.attach(9)){
       servo.attach(9);
-      Serial.print("attached");  //Flag
+      Serial.print("attached");
     }
-    Serial.print(distance);
-    Serial.println("pressed");  //Flag
-    servo.write(180);;
-    delay(20);
-    distance = distance +1;  //Used for testing
+    Serial.println("not pressed");
+    servo.write(180);
   }
-  else{
-    Serial.print("not pressed");  //Flag
+  if(backButtonState == HIGH){
+    Serial.print("pressed");
     servo.detach();
-    Serial.println("detached");  //Flag
+    Serial.println("detached");
   }
-  //delay(500);
 }
 /*
  * Convert time response measurement from sensor to a unit
