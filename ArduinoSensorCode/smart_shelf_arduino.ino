@@ -62,7 +62,7 @@ void loop(){
   stockButtonState = digitalRead(stockButtonPin); //Poll for the button being pressed
 
   //Detect that the button is pressed 
-  if (stockButtonState == HIGH) {
+  if (stockButtonState == LOW) {
   
     //Enter a state of stocking mode being on
     stockMode = true;
@@ -82,7 +82,7 @@ void loop(){
       stockButtonState = digitalRead(stockButtonPin); 
 
       //Create a structure that will exit the while loop 
-      if (stockButtonState == HIGH) {
+      if (stockButtonState == LOW) {
         stockMode = false;
       }
     }
@@ -91,14 +91,14 @@ void loop(){
     //The above conditions are the tests to see if the items are pushed all the way to the front
     itemDistance = pollDistance();
     backPlateButtonState = digitalRead(backPlateButtonPin);
-    if((itemDistance != minRange) || (backPlateButtonState == LOW)){
+    if((itemDistance != minRange) || (backPlateButtonState == HIGH)){
       //Push to the front
-      stopCondition = ((itemDistance != minRange) && (backPlateButtonState == LOW));
+      stopCondition = ((itemDistance != minRange) && (backPlateButtonState == HIGH));
       while(!stopCondition){
         //move forward
         servoControl.write(180);
         //update stop conditions 
-        stopCondition = ((itemDistance != minRange) && (backPlateButtonState == LOW));
+        stopCondition = ((itemDistance != minRange) && (backPlateButtonState == HIGH));
         if(stopCondition){
           servoControl.write(90); //In theory this is the midpoint so it should stop the servo
         }
