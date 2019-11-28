@@ -1,12 +1,11 @@
 #include <Servo.h>
-//#include <LiquidCrystal.h>
-//#include "shelfContainer.h"
-
+#include <LiquidCrystal.h>
 
 //Setup the distance sensor
-int trigPin = 2;
-int echoPin = 3;
+int trigPin = 10;
+int echoPin = 13;
 long duration;
+float indexCount = 1000.0;
 
 //Setup the backplate sensors
 int backPlateButtonPin = A2;
@@ -18,6 +17,10 @@ int backPlateButtonState = 0;
 
 //Create mode for stocking the shelf
 bool stockMode = false;
+
+
+String itemName = "Banana";
+String itemPrice = "9.50"; 
 
 //Create a max and min range
 float maxRange = 25.0;
@@ -32,6 +35,8 @@ bool stopCondition;
 //Create a servo variable to control the two servos
 Servo servoControl;
 
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
 //shelfClass shelf;
 
 void setup() {
@@ -41,10 +46,24 @@ void setup() {
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
 
-  Serial.begin(9600);
-
   servoControl.attach(9);
+  lcd.begin(16, 2);
 
+  Serial.begin(9600);
+  Serial.println(1001);
+  /*
+  if(Serial.available() > 0){
+    itemName = Serial.read();
+  }
+  Serial.println(1002);
+  if(Serial.available() > 0){
+    itemPrice = Serial.read();
+  }
+  */
+  lcd.print(itemName);
+  lcd.setCursor(0,1);
+  lcd.print(itemPrice); 
+  
 }
 
 float pollDistance() {
@@ -61,7 +80,7 @@ float pollDistance() {
 
 void loop() {
   stockButtonState = digitalRead(stockButtonPin); //Poll for the button being pressed
-
+  
   //Detect that the button is pressed
   if (stockButtonState == HIGH) {
     Serial.println("button pressed");
@@ -71,19 +90,20 @@ void loop() {
     while (stockMode) {
       Serial.println("Stocking");
       //Initial poll of backplate postition
-      float tempPosition = pollDistance();
+      float itemDistance = pollDistance();
       //Move the back plate to the back of the range
-      while (tempPosition < maxRange) {
+      while (indexCount < 1000) {
         Serial.println("Stocking actually");
         servoControl.write(0);
+        indexCount++;
+        delay(100);
         //check if the backplate is still in range before moving looping again
-        tempPosition = pollDistance();
-        if (tempPosition >= maxRange) {
-          servoControl.write(95); //In theory this is the midpoint so it should stop the servo
+        itemDistance = pollDistance();
+        if (itemDistance >= maxRange) {
+          servoControl.write(94); //In theory this is the midpoint so it should stop the servo
           break;
         }
       }
-      delay(500);
       //poll the stocking button again
       stockButtonState = digitalRead(stockButtonPin);
 
@@ -111,6 +131,8 @@ void loop() {
         while (!stopCondition) {
           //move forward
           servoControl.write(180);
+          indexCount--;
+          delay(100);
           //update stop conditions
           itemDistance = pollDistance();
           backPlateButtonState = digitalRead(backPlateButtonPin);
@@ -118,10 +140,10 @@ void loop() {
           stopCondition = ((itemDistance < minRange) && (backPlateButtonState == HIGH));
           Serial.println(itemDistance);
           if (stopCondition) {
-            servoControl.write(95); //In theory this is the midpoint so it should stop the servo
+            servoControl.write(94); //In theory this is the midpoint so it should stop the servo
           }
           if(stockButtonState){
-            servoControl.write(95);
+            servoControl.write(94);
             stockMode = true;
             break;
           }
@@ -129,6 +151,7 @@ void loop() {
       }
 
     }
-    Serial.println(50); //temp holder until we find a way how to read from the servo
+    Serial.println(indexCount/10);
+    //Serial.println(50); //temp holder until we find a way how to read from the servo
   }
 }
