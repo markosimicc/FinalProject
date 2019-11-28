@@ -3,30 +3,31 @@ package com.example.smartshelfapp;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+
+import java.util.ArrayList;
 
 
 public class AddPage extends Activity {
 
     EditText inputName;
-    Button buttonSend;
-    //EditText Price;
+    EditText inputPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_page);
-        //Price = (EditText) findViewById(R.id.Price);
     }
 
     public void send (View v){
-
+        ArrayList<String> text = new ArrayList<>();
         inputName = (EditText) findViewById(R.id.Name);
-        //buttonSend = (Button)findViewById(R.id.send);
+        inputPrice = (EditText) findViewById(R.id.Price);
+
+        text.add(inputName.getText().toString());
+        text.add((inputPrice.getText().toString()));
 
         MessageSender messageSender = new MessageSender();
-        messageSender.execute(inputName.getText().toString());
+        messageSender.execute(text);
     }
-
         }

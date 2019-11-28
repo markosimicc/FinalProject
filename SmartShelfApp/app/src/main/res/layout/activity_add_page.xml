@@ -19,18 +19,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.176" />
 
-<!--    <EditText-->
-<!--        android:id="@+id/Price"-->
-<!--        android:layout_width="300dp"-->
-<!--        android:layout_height="85dp"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="textPersonName"-->
-<!--        android:text="Price"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/Name"-->
-<!--        app:layout_constraintVertical_bias="0.22000003" />-->
+    <EditText
+        android:id="@+id/Price"
+        android:layout_width="300dp"
+        android:layout_height="85dp"
+        android:ems="10"
+        android:hint="@string/product_price"
+        android:inputType="textPersonName"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Name"
+        app:layout_constraintVertical_bias="0.22000003" />
+
 
     <Button
         android:id="@+id/send"
