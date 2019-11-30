@@ -1,4 +1,4 @@
-#include <Servo.h>
+ #include <Servo.h>
 #include <LiquidCrystal.h>
 
 //Setup the distance sensor
@@ -35,7 +35,7 @@ bool stopCondition;
 //Create a servo variable to control the two servos
 Servo servoControl;
 
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+LiquidCrystal lcd(12, 11, 5, 4, 3, 6);
 
 //shelfClass shelf;
 
