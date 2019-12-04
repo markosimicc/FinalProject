@@ -99,7 +99,7 @@ void loop() {
       //Move the back plate to the back of the range
       if (!skipLoop) {
         while ((indexCount < 600) && (itemDistance <= maxRange)) {
-          Serial.println(itemDistance);
+          //Serial.println((int)itemDistance);
           servoControl.write(0);
           indexCount++;
           delay(100);
@@ -156,7 +156,6 @@ void loop() {
       }
 
     }
-    Serial.println(indexCount / 6);
-    delay(200);
+    Serial.println((int)(indexCount / 6));
   }
 }
