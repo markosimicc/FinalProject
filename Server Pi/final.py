@@ -26,11 +26,12 @@ def insertItem(name,price,quantity):
         return False
 def insertShelf(shelfid, location,itemid):
     try:
-        c.execute('''INSERT INTO shelves values(?,?)''',(shelfid,location,itemid));
+        c.execute('''INSERT INTO shelves values(?,?,?)''',(shelfid,location,itemid));
         conn.commit()
         return True
     except:
         return False
+
 def getQuantity(itemid):
     try:
         conn.row_factory = sqlite3.Row;
@@ -38,6 +39,17 @@ def getQuantity(itemid):
         c.execute('SELECT quantity FROM items WHERE id = %i'%itemid)
         for row in c:
             temp = row['quantity'];
+        print(temp)
+        return temp
+    except:
+        return None
+def getName(itemid):
+    try:
+        conn.row_factory = sqlite3.Row;
+        c=conn.cursor()
+        c.execute('SELECT name FROM items WHERE id = %i'%itemid)
+        for row in c:
+            temp = row['name'];
         print(temp)
         return temp
     except:
@@ -53,6 +65,7 @@ def getPrice(itemid):
         return temp
     except:
         return None
+
 def getItem(itemid):
     try:
         conn.row_factory = sqlite3.Row;
