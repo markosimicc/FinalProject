@@ -17,7 +17,7 @@ David Casciano
 
 To operate the SmartShelf in similar fashion to the demo, you will need two Raspberry Pi 4's and an Arduino Uno R3. Additional hardware includes:
 
-Elctrical Components
+Electrical Components
 - 2x Continuos Rotation Servo Motor
 - Arduino 1602 LCD Display
 - 2x Buttons
