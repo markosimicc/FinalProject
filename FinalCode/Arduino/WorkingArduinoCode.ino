@@ -24,8 +24,8 @@ String itemName = "Empty";
 String itemPrice = "Empty";
 
 //Create a max and min range
-float maxRange = 21.0;
-float minRange = 15.0;
+float maxRange = 20.0;
+float minRange = 10.0;
 
 //Create a variable which will hold the distance
 float itemDistance;
@@ -93,7 +93,7 @@ void loop() {
     skipLoop = false;
 
     while (stockMode) {
-      Serial.println("Stocking");
+      //Serial.println("Stocking");
       //Initial poll of backplate postition
       float itemDistance = pollDistance();
       //Move the back plate to the back of the range
@@ -133,7 +133,7 @@ void loop() {
       }
       if (((itemDistance > minRange) || (backPlateButtonState == LOW)) && !stockMode) {
         //Push to the front
-        stopCondition = ((itemDistance < minRange) && (backPlateButtonState == HIGH));
+        stopCondition = (((itemDistance < minRange) && (backPlateButtonState == HIGH)) || (indexCount < 0));
         while (!stopCondition) {
           //move forward
           servoControl.write(180);
@@ -143,7 +143,7 @@ void loop() {
           itemDistance = pollDistance();
           backPlateButtonState = digitalRead(backPlateButtonPin);
           stockButtonState = digitalRead(stockButtonPin);
-          stopCondition = ((itemDistance < minRange) && (backPlateButtonState == HIGH));
+          stopCondition = (((itemDistance < minRange) && (backPlateButtonState == HIGH)) || (indexCount < 0));
           if (stopCondition) {
             servoControl.write(94); //In theory this is the midpoint so it should stop the servo
           }
