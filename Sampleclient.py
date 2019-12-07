@@ -2,6 +2,7 @@ import serial
 import socket,sys,time
 import json
 """
+Author: Marko Simic
 This code below is used to be run on the Client Raspberry Pi
 Arduino Uno with uploaded code is connected through wired UDP.
 Client Raspberry Pi is running with ethernet connection to Server RPi
