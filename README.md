@@ -33,8 +33,12 @@ Once assembled, the steps to start the smartshelf are:
 
 1) Connect the Ardriod via serial to the Client Pi
 2) Connect the Client Pi to the Server Pi via ethernet
-3) Start the python server script by running:\
+3) Start the python server script by running:
+
 			python JSONsandrfinal.py
-4) Start the python client script by running:\
+			
+4) Start the python client script by running:
+
 			python SampleClient.py
+			
 5) Ensure that your andriod device is on the same network as the Server Pi and open the app
